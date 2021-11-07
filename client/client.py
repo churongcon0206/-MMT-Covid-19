@@ -1,28 +1,18 @@
-import socketio
+import socket
 
-# standard Python
-sio = socketio.Client()
+HOST = "127.0.0.1"
+SERVER_PORT = 65432
+FORMAT = "utf8"
 
-# asyncio
-sio = socketio.AsyncClient()
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-@sio.event
-def message(data):
-    print('I received a message!')
+print("CLIENT SIDE")
+client.connect((HOST, SERVER_PORT))
+print("Client address:", client.getsockname())
 
-@sio.on('my message')
-def on_message(data):
-    print('I received a message!')
-
-
-@sio.event
-def connect():
-    print("I'm connected!")
-
-@sio.event
-def connect_error(data):
-    print("The connection failed!")
-
-@sio.event
-def disconnect():
-    print("I'm disconnected!")
+username = input("username: ")
+passwork = input("passwork: ")
+client.sendall(username.encode(FORMAT))
+client.recv(1024).decode(FORMAT)
+client.sendall(passwork.encode(FORMAT))
+input()
